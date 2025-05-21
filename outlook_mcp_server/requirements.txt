@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+python-mcp
+httpx
+python-dotenv
+pydantic[email] 
+# msal (for Microsoft Authentication Library, if we choose user/delegated flow later, 
+# but httpx can handle client credentials flow directly for now)

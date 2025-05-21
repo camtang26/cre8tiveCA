@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard] # mcp[cli] includes uvicorn, but explicit is fine
+mcp[cli] # Correct MCP package
+httpx
+python-dotenv
+pytz
+email-validator # For Pydantic EmailStr if used in its schemas
+pydantic[email] # Good to have for consistency if schemas use EmailStr
