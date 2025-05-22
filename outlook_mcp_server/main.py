@@ -1,6 +1,6 @@
-from outlook_mcp_server.tools.outlook_tools import outlook_mcp_instance
+from .tools.outlook_tools import outlook_mcp_instance
 # Ensure core.config is loaded if it sets up environment variables needed by outlook_mcp_instance
-# from outlook_mcp_server.core.config import AZURE_TENANT_ID # etc. if needed before mcp.run()
+# from .core.config import AZURE_TENANT_ID # etc. if needed for direct run, Render handles env vars
 
 # To run this server:
 # 1. Ensure .env file in outlook_mcp_server/ has AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, SENDER_UPN

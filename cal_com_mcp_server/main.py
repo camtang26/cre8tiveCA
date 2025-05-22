@@ -1,6 +1,6 @@
-from cal_com_mcp_server.tools.cal_com_tools import cal_com_mcp_instance
+from .tools.cal_com_tools import cal_com_mcp_instance
 # Ensure core.config is loaded if it sets up environment variables needed by cal_com_mcp_instance
-# from cal_com_mcp_server.core.config import CAL_COM_API_KEY # etc. if needed
+# from .core.config import CAL_COM_API_KEY # etc. if needed for direct run, Render handles env vars
 
 # To run this server:
 # 1. Ensure .env file in cal_com_mcp_server/ has CAL_COM_API_KEY
