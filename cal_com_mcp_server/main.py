@@ -1,4 +1,6 @@
-from .tools.cal_com_tools import cal_com_mcp_instance
+from tools.cal_com_tools import cal_com_mcp_instance
+
+app = cal_com_mcp_instance.app # Expose FastAPI app for Uvicorn when Render runs 'uvicorn main:app'
 # Ensure core.config is loaded if it sets up environment variables needed by cal_com_mcp_instance
 # from .core.config import CAL_COM_API_KEY # etc. if needed for direct run, Render handles env vars
 

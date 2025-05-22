@@ -1,4 +1,6 @@
-from .tools.outlook_tools import outlook_mcp_instance
+from tools.outlook_tools import outlook_mcp_instance
+
+app = outlook_mcp_instance.app # Expose FastAPI app for Uvicorn when Render runs 'uvicorn main:app'
 # Ensure core.config is loaded if it sets up environment variables needed by outlook_mcp_instance
 # from .core.config import AZURE_TENANT_ID # etc. if needed for direct run, Render handles env vars
 
