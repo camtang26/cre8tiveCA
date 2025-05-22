@@ -1,6 +1,6 @@
 import httpx
 import json
-from outlook_mcp_server.core.config import (
+from .config import (
     AZURE_TENANT_ID,
     AZURE_CLIENT_ID,
     AZURE_CLIENT_SECRET,

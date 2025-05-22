@@ -4,7 +4,7 @@ import json # Added for logging params and headers
 from datetime import datetime, timedelta, timezone
 import pytz # For timezone conversion
 
-from cal_com_mcp_server.core.config import CAL_COM_API_KEY, CAL_COM_API_BASE_URL, DEFAULT_EVENT_TYPE_ID
+from .config import CAL_COM_API_KEY, CAL_COM_API_BASE_URL, DEFAULT_EVENT_TYPE_ID
 
 logger = logging.getLogger(__name__) # Initialize logger
 

@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, Dict, Any
 
-from cal_com_mcp_server.core.config import DEFAULT_EVENT_TYPE_ID, DEFAULT_EVENT_DURATION_MINUTES
+from ..core.config import DEFAULT_EVENT_TYPE_ID, DEFAULT_EVENT_DURATION_MINUTES
 
 class CreateCalComBookingInput(BaseModel):
     localDate: str = Field(..., description="Local date for the booking (YYYY-MM-DD)")

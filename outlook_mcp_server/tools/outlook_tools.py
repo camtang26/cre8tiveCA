@@ -1,6 +1,6 @@
 from mcp.server.fastmcp import FastMCP, Context as MCPContext
-from outlook_mcp_server.schemas.outlook_schemas import SendOutlookEmailInput, SendOutlookEmailOutput
-from outlook_mcp_server.core.graph_api_utils import send_email_via_graph_api
+from ..schemas.outlook_schemas import SendOutlookEmailInput, SendOutlookEmailOutput
+from ..core.graph_api_utils import send_email_via_graph_api
 
 outlook_mcp_instance = FastMCP(
     name="outlook_tools_server",

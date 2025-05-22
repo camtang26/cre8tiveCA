@@ -3,12 +3,14 @@ from mcp.types import TextContent # Corrected import for TextContent
 import datetime # Import the full datetime module
 from datetime import timedelta
 
-from cal_com_mcp_server.core.config import DEFAULT_EVENT_TYPE_ID, DEFAULT_EVENT_DURATION_MINUTES
-from cal_com_mcp_server.core.cal_api_utils import (
+from ..core.config import DEFAULT_EVENT_TYPE_ID, DEFAULT_EVENT_DURATION_MINUTES
+from ..core.cal_api_utils import (
     convert_to_utc,
     check_availability,
     create_cal_booking_api_call,
 )
+from ..schemas.cal_com_schemas import CreateCalComBookingInput, CreateCalComBookingOutput, BookingOutputDetails
+
 
 # Create an MCP server instance using FastMCP
 # This instance will be imported into main.py
@@ -19,8 +21,7 @@ cal_com_mcp_instance = FastMCP(
     port=8001        # Default port for this server
 )
 
-# Import Pydantic models for type hinting
-from cal_com_mcp_server.schemas.cal_com_schemas import CreateCalComBookingInput, CreateCalComBookingOutput, BookingOutputDetails
+# Pydantic models are already imported above with relative paths
 
 @cal_com_mcp_instance.tool(
     name="create_cal_com_booking_mcp",
