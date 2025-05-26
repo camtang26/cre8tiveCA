@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 from typing import Dict, Any, Optional
+import httpx
 
 from mcp import types
 from mcp.client.session import ClientSession
@@ -70,7 +71,13 @@ async def call_cal_com_create_booking_tool(
     logger.info(f"Calling Cal.com MCP tool '{tool_name}' at {CAL_COM_MCP_SERVER_URL} with wrapped args: {tool_args_wrapped}")
 
     try:
-        async with streamablehttp_client(url=CAL_COM_MCP_SERVER_URL) as (
+        # Create custom httpx client with longer timeout for cold starts
+        http_client = httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=30.0))
+        
+        async with streamablehttp_client(
+            url=CAL_COM_MCP_SERVER_URL,
+            http_client=http_client
+        ) as (
             read_stream,
             write_stream,
             _,
