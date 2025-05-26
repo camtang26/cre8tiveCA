@@ -1,5 +1,15 @@
 from mcp.server.fastmcp import FastMCP, Context as MCPContext # Renaming to avoid conflict if we use FastAPI's ContextVar
-from mcp.types import TextContent # Corrected import for TextContent
+try:
+    from mcp.types import TextContent # Corrected import for TextContent
+except ImportError:
+    # Fallback if mcp.types doesn't exist in this version
+    try:
+        from mcp import TextContent
+    except ImportError:
+        # Create a minimal TextContent if not available
+        class TextContent:
+            def __init__(self, text: str):
+                self.text = text
 import datetime # Import the full datetime module
 from datetime import timedelta
 
