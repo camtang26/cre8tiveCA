@@ -3,3 +3,6 @@
 [2025-05-21 15:51:22] - Outlook MCP server dependencies installed and server started successfully on port 8002.
 [2025-05-21 16:05:00] - Refactored Outlook MCP server to use `mcp_instance.run()` based on external documentation. Server confirmed running on port 8002. Testing with Invoke-WebRequest revealed MCP streamable-http transport requires specific `Accept` headers and session ID management, which `Invoke-WebRequest` cannot fully provide for tool calls.
 [2025-05-21 16:10:00] - Created initial file structure for Bridge Server: `requirements.txt`, `.env`, `core/config.py`, `core/__init__.py`, `schemas/__init__.py`, `schemas/webhook_schemas.py`, `mcp_clients/__init__.py`, `mcp_clients/cal_com_client.py`, `mcp_clients/outlook_client.py`, and `main.py`.
+[2025-05-27] - Cal.com MCP Server successfully deployed to Render.com using Docker. Service is fully operational with MCP SDK (mcp: 1.9.1, python-mcp: 1.0.1) loaded and accessible via streamable-http transport.
+[2025-05-27] - Created deployment documentation: `OUTLOOK_MCP_DEPLOYMENT_STEPS.md` and `BRIDGE_SERVER_DEPLOYMENT_STEPS.md` to guide remaining deployments.
+[2025-05-27] - Next steps: Deploy outlook_mcp_server using Docker, then deploy bridge_server, and test full ElevenLabs → Bridge → MCP integration.

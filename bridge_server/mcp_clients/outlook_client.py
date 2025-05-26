@@ -7,7 +7,7 @@ from mcp import types
 from mcp.client.session import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
 
-from bridge_server.core.config import OUTLOOK_MCP_SERVER_URL
+from core.config import OUTLOOK_MCP_SERVER_URL
 # Assuming similar Pydantic models as defined in outlook_mcp_server.schemas.outlook_schemas
 from pydantic import BaseModel, EmailStr, Field # Assuming similar structure
 

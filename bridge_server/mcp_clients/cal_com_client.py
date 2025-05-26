@@ -7,7 +7,7 @@ from mcp import types
 from mcp.client.session import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
 
-from bridge_server.core.config import CAL_COM_MCP_SERVER_URL
+from core.config import CAL_COM_MCP_SERVER_URL
 # We'll need to define the input/output Pydantic models that the Cal.com MCP tool expects/returns.
 # For now, let's assume they are similar to what we might pass or get.
 # These should ideally mirror or be compatible with cal_com_mcp_server.schemas.cal_com_schemas

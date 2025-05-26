@@ -5,14 +5,14 @@ from datetime import datetime, timezone # Added
 import pytz # Added
 
 # Schemas for webhook validation
-from bridge_server.schemas.webhook_schemas import CalComWebhookPayload, OutlookEmailWebhookPayload
+from schemas.webhook_schemas import CalComWebhookPayload, OutlookEmailWebhookPayload
 
 # MCP client utility functions
-from bridge_server.mcp_clients.cal_com_client import call_cal_com_create_booking_tool, CreateCalComBookingClientInput, CreateCalComBookingClientOutput
-from bridge_server.mcp_clients.outlook_client import call_outlook_send_email_tool, SendOutlookEmailClientInput, SendOutlookEmailClientOutput
+from mcp_clients.cal_com_client import call_cal_com_create_booking_tool, CreateCalComBookingClientInput, CreateCalComBookingClientOutput
+from mcp_clients.outlook_client import call_outlook_send_email_tool, SendOutlookEmailClientInput, SendOutlookEmailClientOutput
 
 # Configuration (MCP server URLs)
-from bridge_server.core.config import CAL_COM_MCP_SERVER_URL, OUTLOOK_MCP_SERVER_URL
+from core.config import CAL_COM_MCP_SERVER_URL, OUTLOOK_MCP_SERVER_URL
 
 logging.basicConfig(level=logging.INFO) # Basic logging for the bridge server
 logger = logging.getLogger(__name__)
