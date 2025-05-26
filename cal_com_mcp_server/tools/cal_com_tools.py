@@ -3,13 +3,26 @@ from mcp.types import TextContent # Corrected import for TextContent
 import datetime # Import the full datetime module
 from datetime import timedelta
 
-from ..core.config import DEFAULT_EVENT_TYPE_ID, DEFAULT_EVENT_DURATION_MINUTES
-from ..core.cal_api_utils import (
-    convert_to_utc,
-    check_availability,
-    create_cal_booking_api_call,
-)
-from ..schemas.cal_com_schemas import CreateCalComBookingInput, CreateCalComBookingOutput, BookingOutputDetails
+try:
+    from ..core.config import DEFAULT_EVENT_TYPE_ID, DEFAULT_EVENT_DURATION_MINUTES
+    from ..core.cal_api_utils import (
+        convert_to_utc,
+        check_availability,
+        create_cal_booking_api_call,
+    )
+    from ..schemas.cal_com_schemas import CreateCalComBookingInput, CreateCalComBookingOutput, BookingOutputDetails
+except ImportError:
+    # Fallback for when running as main module
+    import sys
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from core.config import DEFAULT_EVENT_TYPE_ID, DEFAULT_EVENT_DURATION_MINUTES
+    from core.cal_api_utils import (
+        convert_to_utc,
+        check_availability,
+        create_cal_booking_api_call,
+    )
+    from schemas.cal_com_schemas import CreateCalComBookingInput, CreateCalComBookingOutput, BookingOutputDetails
 
 
 # Create an MCP server instance using FastMCP

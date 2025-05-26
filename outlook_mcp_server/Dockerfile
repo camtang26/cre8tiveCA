@@ -28,24 +28,30 @@ RUN pip install --no-cache-dir git+https://github.com/modelcontextprotocol/pytho
 # Copy application code
 COPY . .
 
-# Create a fallback main.py if MCP imports fail
-RUN echo 'import sys; \
-try: \
-    from tools.outlook_tools import outlook_mcp_instance; \
-    app = outlook_mcp_instance.app; \
-except ImportError as e: \
-    print(f"MCP import failed: {e}"); \
-    from fastapi import FastAPI; \
-    app = FastAPI(title="Outlook MCP Server", description="Outlook integration service"); \
-    @app.get("/health"); \
-    def health(): return {"status": "ok", "message": "MCP server fallback mode"}; \
-' > fallback_main.py
+# Create an __init__.py to make the directory a proper Python package
+RUN touch __init__.py
 
 # Expose port
 EXPOSE 8000
 
 # Set environment variable for port
 ENV PORT=8000
+ENV PYTHONPATH=/app
 
-# Run the application with fallback
-CMD ["sh", "-c", "python -c 'import main; print(\"Using main.py\")' && uvicorn main:app --host 0.0.0.0 --port $PORT || (echo 'Falling back to basic FastAPI app' && uvicorn fallback_main:app --host 0.0.0.0 --port $PORT)"]
+# Create a startup script that handles imports properly
+RUN echo '#!/bin/bash\n\
+set -e\n\
+echo "Starting Outlook MCP Server..."\n\
+\n\
+# Try to run the main application\n\
+if python -c "import sys; sys.path.insert(0, \"/app\"); from tools.outlook_tools import outlook_mcp_instance" 2>/dev/null; then\n\
+    echo "✓ MCP imports successful, starting main application"\n\
+    exec uvicorn main:app --host 0.0.0.0 --port $PORT\n\
+else\n\
+    echo "⚠ MCP imports failed, starting fallback application"\n\
+    exec uvicorn fallback_main:app --host 0.0.0.0 --port $PORT\n\
+fi\n\
+' > /app/start.sh && chmod +x /app/start.sh
+
+# Run the startup script
+CMD ["/app/start.sh"]
