@@ -1,7 +1,14 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, Dict, Any
 
-from ..core.config import DEFAULT_EVENT_TYPE_ID, DEFAULT_EVENT_DURATION_MINUTES
+try:
+    from ..core.config import DEFAULT_EVENT_TYPE_ID, DEFAULT_EVENT_DURATION_MINUTES
+except ImportError:
+    # Fallback for when running as main module
+    import sys
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from core.config import DEFAULT_EVENT_TYPE_ID, DEFAULT_EVENT_DURATION_MINUTES
 
 class CreateCalComBookingInput(BaseModel):
     localDate: str = Field(..., description="Local date for the booking (YYYY-MM-DD)")
