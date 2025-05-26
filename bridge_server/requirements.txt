@@ -1,12 +1,17 @@
 fastapi>=0.115.0,<0.116.0
 uvicorn[standard]>=0.34.0,<0.35.0
-python-mcp[cli]>=1.0.1,<1.1.0 
+mcp>=1.0.0
+python-mcp>=1.0.1,<1.1.0
 httpx>=0.28.0,<0.29.0
+httpx-sse>=0.4.0
 pytz>=2024.1
 python-dotenv>=1.0.0,<1.2.0
 pydantic>=2.11.0,<2.12.0
-email-validator>=2.0.0,<2.3.0 
+email-validator>=2.0.0,<2.3.0
+sse-starlette>=2.0.0
+typer>=0.9.0
+rich>=13.0.0
+# MCP client dependencies explicitly listed since python-mcp[cli] extras not working on Render
 # email-validator for EmailStr type hint in schemas
-# python-mcp[cli] brings client dependencies like httpx-sse, typer, rich etc.
 # fastapi brings starlette, pydantic
 # uvicorn[standard] brings websockets, httptools, watchfiles etc.
