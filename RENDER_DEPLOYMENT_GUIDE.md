@@ -10,6 +10,14 @@ ModuleNotFoundError: No module named 'mcp.server.fastmcp'
 
 ## Solution Options
 
+### Option 0: Use Enhanced Build Script (NEW - RECOMMENDED)
+Use the new `render_build.sh` or `render_install.py` scripts that implement multiple fallback strategies:
+
+**For each service on Render:**
+- Root Directory: `cal_com_mcp_server` or `outlook_mcp_server`
+- Build Command: `./render_build.sh` OR `python render_install.py`
+- Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+
 ### Option 1: Use Modified requirements.txt (Recommended)
 The `requirements.txt` files have been updated to use `python-mcp[server]==1.0.1`.
 
@@ -96,22 +104,43 @@ If the deployment still fails:
 3. Use the Render shell to manually test the installation commands
 4. Consider using a Dockerfile for more control over the build process
 
-## Docker Alternative (if needed)
+## Docker Alternative (RECOMMENDED if other methods fail)
 
-Create a `Dockerfile` in each server directory:
+Dockerfiles have been created in each server directory with robust installation strategies:
 
-```dockerfile
-FROM python:3.11-slim
+**For Docker deployment on Render:**
+1. Choose "Docker" as the environment
+2. Root Directory: `cal_com_mcp_server` or `outlook_mcp_server`
+3. No build command needed (Dockerfile handles everything)
+4. The Dockerfile includes:
+   - Multi-stage dependency installation
+   - Automatic fallback strategies
+   - Build-time verification
 
-WORKDIR /app
+## Testing and Troubleshooting Scripts
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir "python-mcp[server]==1.0.1"
+Several helper scripts are now available:
 
-COPY . .
+1. **test_mcp_import.py** - Test if python-mcp modules import correctly
+   ```bash
+   python test_mcp_import.py
+   ```
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
+2. **troubleshoot_render.py** - Diagnose installation issues
+   ```bash
+   python troubleshoot_render.py
+   ```
 
-Then use Render's Docker deployment option.
+3. **render_install.py** - Robust installation with multiple strategies
+   ```bash
+   python cal_com_mcp_server/render_install.py
+   # or
+   python outlook_mcp_server/render_install.py
+   ```
+
+4. **render_build.sh** - Enhanced bash build script
+   ```bash
+   ./cal_com_mcp_server/render_build.sh
+   # or
+   ./outlook_mcp_server/render_build.sh
+   ```
