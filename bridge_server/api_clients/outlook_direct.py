@@ -85,11 +85,124 @@ class OutlookDirectClient:
                 logger.exception("Error getting access token")
                 raise
     
+    def _format_email_html(self, content: str) -> str:
+        """Format email content with proper HTML structure for Outlook compatibility"""
+        # Clean up content by adding proper line breaks and structure
+        formatted_content = content.replace('\n', '<br>')
+        
+        # Create a professional HTML email template
+        html_template = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        /* Reset styles for Outlook */
+        .ExternalClass, .ExternalClass p, .ExternalClass span, 
+        .ExternalClass font, .ExternalClass td, .ExternalClass div {{
+            line-height: 100%;
+        }}
+        p {{
+            margin: 0;
+            padding: 0;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }}
+        /* Table styles */
+        table {{
+            border-collapse: collapse;
+            mso-table-lspace: 0px;
+            mso-table-rspace: 0px;
+        }}
+        td, a, span {{
+            border-collapse: collapse;
+            mso-line-height-rule: exactly;
+        }}
+        /* Custom styles */
+        .email-container {{
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333333;
+        }}
+        .header {{
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }}
+        .content {{
+            padding: 25px;
+        }}
+        .footer {{
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 20px;
+            font-size: 12px;
+        }}
+        h1, h2, h3 {{
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }}
+        h1 {{ font-size: 24px; color: #2c3e50; }}
+        h2 {{ font-size: 18px; color: #34495e; }}
+        h3 {{ font-size: 16px; color: #34495e; }}
+        ul, ol {{
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }}
+        li {{
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }}
+        .cta-button {{
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 15px 0;
+            font-weight: bold;
+        }}
+        .highlight {{
+            background-color: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }}
+    </style>
+</head>
+<body style="margin: 0; padding: 0;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto;">
+        <tr>
+            <td class="email-container">
+                <div class="content">
+                    {formatted_content}
+                </div>
+                <div class="footer">
+                    <p style="margin: 0; text-align: center;">
+                        <strong>Stuart | AI Sales Strategist</strong><br>
+                        Cre8tive AI<br>
+                        📧 stuart@cre8tive.ai | 🌐 <a href="https://cre8tive.ai" style="color: #ffffff;">cre8tive.ai</a>
+                    </p>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>"""
+        return html_template
+
     async def send_email(self, email_input: OutlookEmailInput) -> OutlookEmailOutput:
         """Send an email using Microsoft Graph API"""
         try:
             # Get access token
             access_token = await self._get_access_token()
+            
+            # Format the email content with proper HTML structure
+            formatted_html = self._format_email_html(email_input.emailBodyHtml)
             
             # Prepare email message
             message = {
@@ -97,7 +210,7 @@ class OutlookDirectClient:
                     "subject": email_input.emailSubject,
                     "body": {
                         "contentType": "HTML",
-                        "content": email_input.emailBodyHtml
+                        "content": formatted_html
                     },
                     "toRecipients": [
                         {
