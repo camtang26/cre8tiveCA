@@ -8,7 +8,7 @@ class CalComWebhookPayload(BaseModel):
     """
     attendee_name: str = Field(..., description="Name of the person attending the event.")
     attendee_email: EmailStr = Field(..., description="Email of the person attending the event.")
-    attendee_timezone: str = Field(..., description="Timezone of the attendee (e.g., 'Australia/Brisbane').")
+    attendee_timezone: Optional[str] = Field("America/New_York", description="Timezone of the attendee (e.g., 'Australia/Brisbane'). Defaults to America/New_York if not provided.")
     event_type_id: int = Field(..., description="Cal.com event type ID.")
     start_time_utc: str = Field(..., description="Requested start date and time for the consultation in UTC (ISO 8601 format, e.g., YYYY-MM-DDTHH:MM:SSZ).")
     end_time_utc: Optional[str] = Field(None, description="Requested end date and time for the consultation in UTC (ISO 8601 format). Optional, as event type might have fixed duration.")
