@@ -44,7 +44,8 @@ class CalComDirectClient:
         self.api_base_url = api_base_url.rstrip('/')
         self.headers = {
             "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "cal-api-version": "2024-08-13"  # Required for Cal.com API v2
         }
     
     def _convert_to_utc(self, local_date: str, local_time: str, timezone_str: str) -> datetime:
@@ -123,18 +124,17 @@ class CalComDirectClient:
                     error_details="Time slot unavailable"
                 )
             
-            # Prepare booking data
+            # Prepare booking data for Cal.com API v2
             booking_data = {
                 "eventTypeId": booking_input.eventTypeId,
                 "start": start_utc.isoformat(),
-                "end": end_utc.isoformat(),
-                "timeZone": booking_input.localTimeZone,
-                "language": booking_input.language,
-                "metadata": booking_input.metadata or {},
-                "responses": {
+                "attendee": {
                     "name": booking_input.attendeeName,
-                    "email": booking_input.attendeeEmail
-                }
+                    "email": booking_input.attendeeEmail,
+                    "timeZone": booking_input.localTimeZone,
+                    "language": booking_input.language or "en"
+                },
+                "metadata": booking_input.metadata or {}
             }
             
             # Add guests if provided

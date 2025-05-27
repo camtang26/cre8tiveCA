@@ -49,7 +49,7 @@ def test_system(bridge_url: str):
         response = requests.post(
             f"{bridge_url}/webhook/cal/schedule_consultation",
             json=cal_payload,
-            timeout=30
+            timeout=90  # Longer timeout for cold starts
         )
         print(f"   Status: {response.status_code}")
         print(f"   Response: {json.dumps(response.json(), indent=2)}")
@@ -74,7 +74,7 @@ def test_system(bridge_url: str):
         response = requests.post(
             f"{bridge_url}/webhook/outlook/send_email",
             json=email_payload,
-            timeout=30
+            timeout=90  # Longer timeout for cold starts
         )
         print(f"   Status: {response.status_code}")
         print(f"   Response: {json.dumps(response.json(), indent=2)}")
