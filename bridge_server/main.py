@@ -136,20 +136,37 @@ async def webhook_schedule_consultation(payload: CalComWebhookPayload, request: 
             )
     
     else:
-        # Direct API approach
-        direct_input = CalComBookingInput(
-            eventTypeId=payload.event_type_id or DEFAULT_EVENT_TYPE_ID,
-            start=payload.start_time_utc,
-            end=payload.end_time_utc,
-            attendee=CalComBookingInput.Attendee(
-                name=payload.attendee_name,
-                email=payload.attendee_email,
-                timeZone=payload.attendee_timezone,
+        # Direct API approach - convert UTC times to local date/time
+        try:
+            # Parse UTC times
+            start_utc = datetime.fromisoformat(payload.start_time_utc.replace('Z', '+00:00'))
+            
+            # Convert to attendee's timezone
+            attendee_tz = pytz.timezone(payload.attendee_timezone)
+            start_local = start_utc.astimezone(attendee_tz)
+            
+            # Extract local date and time components
+            local_date = start_local.strftime('%Y-%m-%d')
+            local_time = start_local.strftime('%H:%M')
+            
+            direct_input = CalComBookingInput(
+                localDate=local_date,
+                localTime=local_time,
+                localTimeZone=payload.attendee_timezone,
+                attendeeName=payload.attendee_name,
+                attendeeEmail=payload.attendee_email,
+                eventTypeId=payload.event_type_id or DEFAULT_EVENT_TYPE_ID,
+                eventDurationMinutes=30,  # Calculate from end time if needed
+                guests=payload.guests or [],
+                metadata=payload.metadata or {},
                 language=payload.language or "en"
-            ),
-            guests=payload.guests or [],
-            metadata=payload.metadata or {}
-        )
+            )
+        except Exception as e:
+            logger.error(f"Error converting UTC times to local: {e}")
+            return JSONResponse(
+                status_code=400,
+                content={"status": "error", "message": f"Invalid time format: {str(e)}"}
+            )
         
         try:
             result: CalComBookingOutput = await cal_com_client.create_booking(direct_input)
