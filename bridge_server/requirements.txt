@@ -11,6 +11,8 @@ email-validator>=2.0.0,<2.3.0
 sse-starlette>=2.0.0
 typer>=0.9.0
 rich>=13.0.0
+# Direct API integration dependencies
+msal>=1.31.0,<1.32.0  # Microsoft Authentication Library for Azure/Outlook
 # MCP client dependencies explicitly listed since python-mcp[cli] extras not working on Render
 # email-validator for EmailStr type hint in schemas
 # fastapi brings starlette, pydantic

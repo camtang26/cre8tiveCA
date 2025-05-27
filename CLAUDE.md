@@ -4,9 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an MCP (Model Context Protocol) integration system that bridges ElevenLabs AI agents with Cal.com (scheduling) and Microsoft Outlook (email). It consists of three interconnected servers using the MCP protocol v1.0.1.
+This is an integration system that bridges ElevenLabs AI agents with Cal.com (scheduling) and Microsoft Outlook (email). The system supports two integration modes:
+
+1. **MCP Mode** (Original): Uses Model Context Protocol with three interconnected servers
+2. **Direct API Mode** (Recommended): Bridge server calls Cal.com and Microsoft Graph APIs directly
 
 ## Running the Servers
+
+### Direct API Mode (Recommended)
+
+```bash
+# Only need to run the Bridge Server
+uvicorn bridge_server.main:app --port 8000 --reload
+```
+
+### MCP Mode (Original)
 
 All servers must be run from the project root directory:
 
@@ -23,10 +35,32 @@ python -m outlook_mcp_server.main
 
 ## Required Environment Variables
 
-Each server requires a `.env` file in its directory:
+### Direct API Mode (Recommended)
 
 **bridge_server/.env**
 ```
+# Set to "direct" for direct API integration
+INTEGRATION_MODE=direct
+
+# Cal.com API
+CAL_COM_API_KEY=<your-api-key>
+CAL_COM_API_BASE_URL=https://api.cal.com/v2
+DEFAULT_EVENT_TYPE_ID=1837761
+DEFAULT_EVENT_DURATION_MINUTES=30
+
+# Microsoft Graph API (Outlook)
+AZURE_TENANT_ID=<your-tenant-id>
+AZURE_CLIENT_ID=<your-client-id>
+AZURE_CLIENT_SECRET=<your-client-secret>
+SENDER_UPN=<sender-email@domain.com>
+```
+
+### MCP Mode (Original)
+
+**bridge_server/.env**
+```
+# Set to "mcp" for MCP protocol mode
+INTEGRATION_MODE=mcp
 CAL_COM_MCP_SERVER_URL=http://localhost:8001/mcp
 OUTLOOK_MCP_SERVER_URL=http://localhost:8002/mcp
 ```
