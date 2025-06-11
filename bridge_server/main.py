@@ -283,6 +283,15 @@ async def health_check():
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
+@app.get("/ping")
+async def ping():
+    """Keep-alive endpoint to prevent Render cold starts"""
+    return {
+        "status": "alive",
+        "service": "bridge_server",
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
 # To run this Bridge Server:
 # 1. Set INTEGRATION_MODE in .env to either "mcp" or "direct"
 # 2. For MCP mode: Ensure MCP servers are running and URLs are set

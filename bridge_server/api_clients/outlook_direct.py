@@ -52,7 +52,10 @@ class OutlookDirectClient:
         # Get new token
         token_url = f"https://login.microsoftonline.com/{self.tenant_id}/oauth2/v2.0/token"
         
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with httpx.AsyncClient(
+            timeout=httpx.Timeout(10.0, connect=5.0),  # Optimized from 30s
+            limits=httpx.Limits(max_keepalive_connections=5, max_connections=10)
+        ) as client:
             try:
                 response = await client.post(
                     token_url,
@@ -223,8 +226,11 @@ class OutlookDirectClient:
                 "saveToSentItems": email_input.saveToSentItems
             }
             
-            # Send the email
-            async with httpx.AsyncClient(timeout=30.0) as client:
+            # Send the email with optimized timeout and connection pooling
+            async with httpx.AsyncClient(
+                timeout=httpx.Timeout(10.0, connect=5.0),  # Optimized from 30s
+                limits=httpx.Limits(max_keepalive_connections=5, max_connections=10)
+            ) as client:
                 response = await client.post(
                     f"{self.graph_base_url}/users/{self.sender_upn}/sendMail",
                     headers={
@@ -280,7 +286,10 @@ class OutlookDirectClient:
             access_token = await self._get_access_token()
             
             # Try to get user info
-            async with httpx.AsyncClient(timeout=10.0) as client:
+            async with httpx.AsyncClient(
+                timeout=httpx.Timeout(5.0, connect=3.0),  # Quick test
+                limits=httpx.Limits(max_keepalive_connections=5, max_connections=10)
+            ) as client:
                 response = await client.get(
                     f"{self.graph_base_url}/users/{self.sender_upn}",
                     headers={"Authorization": f"Bearer {access_token}"}

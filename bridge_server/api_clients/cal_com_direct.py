@@ -59,42 +59,8 @@ class CalComDirectClient:
             logger.error(f"Error converting to UTC: {e}")
             raise
     
-    async def check_availability(
-        self, 
-        start_time: datetime, 
-        end_time: datetime, 
-        event_type_id: int
-    ) -> bool:
-        """Check if the time slot is available"""
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            try:
-                # Format times for API
-                date_from = start_time.strftime("%Y-%m-%d")
-                date_to = end_time.strftime("%Y-%m-%d")
-                
-                response = await client.get(
-                    f"{self.api_base_url}/availability",
-                    headers=self.headers,
-                    params={
-                        "eventTypeId": event_type_id,
-                        "dateFrom": date_from,
-                        "dateTo": date_to,
-                        "timeZone": "UTC"
-                    }
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    # Check if the specific time slot is available
-                    # This is a simplified check - you may need to parse the response more carefully
-                    return True
-                else:
-                    logger.warning(f"Availability check failed: {response.status_code}")
-                    return True  # Assume available if check fails
-                    
-            except Exception as e:
-                logger.error(f"Error checking availability: {e}")
-                return True  # Assume available if check fails
+    # REMOVED: check_availability method - Cal.com API already validates availability during booking creation
+    # This eliminates an unnecessary API call and improves performance
     
     async def create_booking(self, booking_input: CalComBookingInput) -> CalComBookingOutput:
         """Create a booking in Cal.com"""
@@ -110,19 +76,8 @@ class CalComDirectClient:
             duration_minutes = booking_input.eventDurationMinutes or 30
             end_utc = start_utc + timedelta(minutes=duration_minutes)
             
-            # Check availability
-            is_available = await self.check_availability(
-                start_utc, 
-                end_utc, 
-                booking_input.eventTypeId
-            )
-            
-            if not is_available:
-                return CalComBookingOutput(
-                    success=False,
-                    message="The requested time slot is not available",
-                    error_details="Time slot unavailable"
-                )
+            # Skip availability check - Cal.com API will validate during booking creation
+            # This improves performance by eliminating an extra API call
             
             # Prepare booking data for Cal.com API v2
             booking_data = {
@@ -141,8 +96,11 @@ class CalComDirectClient:
             if booking_input.guests:
                 booking_data["guests"] = booking_input.guests
             
-            # Create the booking
-            async with httpx.AsyncClient(timeout=30.0) as client:
+            # Create the booking with optimized timeout and connection pooling
+            async with httpx.AsyncClient(
+                timeout=httpx.Timeout(10.0, connect=5.0),  # Reduced from 30s
+                limits=httpx.Limits(max_keepalive_connections=5, max_connections=10)
+            ) as client:
                 response = await client.post(
                     f"{self.api_base_url}/bookings",
                     headers=self.headers,
