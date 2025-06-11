@@ -41,6 +41,26 @@ export default async (req: Request, context: Context) => {
 
   try {
     const payload = await req.json();
+    
+    // Check if Azure credentials are configured
+    const tenantId = Netlify.env.get('AZURE_TENANT_ID');
+    const clientId = Netlify.env.get('AZURE_CLIENT_ID');
+    const clientSecret = Netlify.env.get('AZURE_CLIENT_SECRET');
+    const senderUpn = Netlify.env.get('SENDER_UPN');
+    
+    if (!tenantId || tenantId === 'your-azure-tenant-id' || 
+        !clientId || !clientSecret || !senderUpn) {
+      console.error('Azure credentials not configured');
+      return new Response(JSON.stringify({
+        status: 'error',
+        message: 'Azure credentials not configured. Please update environment variables in Netlify dashboard.',
+        details: 'Missing or placeholder Azure credentials'
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
     const accessToken = await getAccessToken();
 
     // Wrap content in professional template

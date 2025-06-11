@@ -8,28 +8,49 @@ export default async (req: Request, context: Context) => {
   try {
     const payload = await req.json();
     
+    // First, check if API key is set
+    const apiKey = Netlify.env.get('CAL_COM_API_KEY');
+    if (!apiKey || apiKey === 'your-cal-com-api-key-here') {
+      console.error('Cal.com API key not configured');
+      return new Response(JSON.stringify({
+        status: 'error',
+        message: 'Cal.com API key not configured. Please update environment variables in Netlify dashboard.',
+        details: 'Missing or placeholder API key'
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
+    // Cal.com API v2 expects start and end in ISO format
+    const bookingData = {
+      eventTypeId: parseInt(Netlify.env.get('DEFAULT_EVENT_TYPE_ID') || '1837761'),
+      start: payload.start_time_utc,
+      end: payload.end_time_utc, // Use the end time from payload
+      timeZone: payload.attendee_timezone,
+      responses: {
+        name: payload.attendee_name,
+        email: payload.attendee_email
+      },
+      metadata: payload.metadata || {},
+      language: payload.language || 'en'
+    };
+    
+    console.log('Sending to Cal.com:', JSON.stringify(bookingData, null, 2));
+    
     // Direct pass-through to Cal.com API v2
     const calcomResponse = await fetch('https://api.cal.com/v2/bookings', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Netlify.env.get('CAL_COM_API_KEY')}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
         'cal-api-version': '2'
       },
-      body: JSON.stringify({
-        eventTypeId: parseInt(Netlify.env.get('DEFAULT_EVENT_TYPE_ID') || '1837761'),
-        start: payload.start_time_utc,
-        timeZone: payload.attendee_timezone,
-        responses: {
-          name: payload.attendee_name,
-          email: payload.attendee_email
-        },
-        metadata: payload.metadata || {},
-        language: payload.language || 'en'
-      })
+      body: JSON.stringify(bookingData)
     });
 
     const result = await calcomResponse.json();
+    console.log('Cal.com response:', JSON.stringify(result, null, 2));
 
     if (calcomResponse.ok && result.status === 'success') {
       return new Response(JSON.stringify({
@@ -51,7 +72,7 @@ export default async (req: Request, context: Context) => {
       console.error('Cal.com API error:', result);
       return new Response(JSON.stringify({
         status: 'error',
-        message: result.message || 'Failed to book consultation',
+        message: result.message || result.error || 'Failed to book consultation',
         details: result
       }), {
         status: 400,
