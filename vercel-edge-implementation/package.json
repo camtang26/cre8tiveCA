@@ -1,0 +1,16 @@
+{
+  "name": "cre8tiveai-edge-webhooks",
+  "version": "1.0.0",
+  "description": "Lightning-fast webhook handlers for ElevenLabs integration",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

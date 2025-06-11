@@ -1,0 +1,8 @@
+[build]
+  publish = "public/"
+
+# No build command needed for edge functions
+[build.environment]
+  NODE_VERSION = "18"
+
+# Edge functions are automatically detected in netlify/edge-functions/

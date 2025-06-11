@@ -1,0 +1,14 @@
+{
+  "name": "cre8tiveai-elevenlabs-webhooks",
+  "version": "1.0.0",
+  "description": "Lightning-fast webhook handlers for ElevenLabs integration using Netlify Edge Functions",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build step required for edge functions'",
+    "deploy": "netlify deploy --prod"
+  },
+  "devDependencies": {
+    "@netlify/edge-functions": "^2.0.0"
+  }
+}

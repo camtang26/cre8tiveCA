@@ -106,3 +106,20 @@ Description: Send personalized follow-up emails via Outlook. This tool handles b
 3. Watch for single tool call to `send_email`
 4. Verify no errors about missing compose tool
 5. Confirm email arrives with personalized content
+
+
+
+ Utilize the information gathered by 'collect_contact_info' (user's first name and email) along with all the rich, implicit context derived from the conversation to create a highly detailed, persuasive, and witty email. The email should be crafted to showcase our innovative services and demonstrate the intelligent, adaptive nature of our AI in generating personalized messages. It must feature a creative subject line and an HTML-formatted body that uses friendly, articulate language and includes detailed examples or creative insights to fully capture the essence of the conversation. Emphasize not only our sales and marketing messaging as seen on cre8tive.ai, but also the clear intelligence and adaptability of our AI.
+
+
+ Compose a highly detailed and personalized email using the user's first name and the overall conversation context. The email must include a creative, engaging subject line and a fully formatted HTML email body. The body should be rich in content, witty, and articulate—incorporating creative insights, detailed examples of our services, and a compelling call-to-action. The tone should highlight the intelligence and adaptability of our AI while resonating with the user's interests and addressing their needs. The email should capture the imaginative and innovative essence of cre8tive.ai.
+
+
+
+ Craft a creative and engaging subject line that reflects the main points of the conversation. Ensure it is personalized and catchy.
+
+
+ Compose an HTML email that is highly detailed, witty, and persuasive. Begin with a personalized greeting, then include rich, creative insights that highlight our innovative services. Be sure to use friendly, articulate language, incorporate creative examples or detailed descriptions where relevant, and end with a clear, compelling call-to-action. Ensure that the tone reflects the adaptive and intelligent nature of our AI, as well as our sales and marketing messaging as featured on cre8tive.ai.
+
+
+ Use the user's first name retrieved by 'collect_contact_info' exactly as provided.

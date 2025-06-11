@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "api/schedule.js": {
+      "maxDuration": 10
+    },
+    "api/email.js": {
+      "maxDuration": 10
+    }
+  },
+  "regions": ["syd1"],
+  "trailingSlash": false
+}
