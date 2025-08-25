@@ -1,0 +1,36 @@
+# Netlify configuration at repository root
+# This tells Netlify to build from the netlify-edge-implementation subdirectory
+
+[build]
+  base = "netlify-edge-implementation"
+  publish = "netlify-edge-implementation/public"
+  command = "echo 'No build needed for edge functions'"
+  functions = "netlify-edge-implementation/netlify/functions"
+  edge_functions = "netlify-edge-implementation/netlify/edge-functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[functions]
+  directory = "netlify-edge-implementation/netlify/functions"
+  node_bundler = "esbuild"
+
+[[edge_functions]]
+  path = "/api/email"
+  function = "email"
+
+[[edge_functions]]
+  path = "/api/debug-env"
+  function = "debug-env"
+
+[[edge_functions]]
+  path = "/api/test-azure-auth"
+  function = "test-azure-auth"
+
+[[edge_functions]]
+  path = "/api/current-time"
+  function = "current-time"
+
+[[edge_functions]]
+  path = "/api/webhook-auth"
+  function = "webhook-auth"
