@@ -30,7 +30,3 @@
 [[edge_functions]]
   path = "/api/current-time"
   function = "current-time"
-
-[[edge_functions]]
-  path = "/api/webhook-auth"
-  function = "webhook-auth"

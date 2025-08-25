@@ -27,3 +27,5 @@
 [[edge_functions]]
   path = "/api/current-time"
   function = "current-time"
+
+# Note: webhook-auth.ts was removed as it's a utility module, not an endpoint
