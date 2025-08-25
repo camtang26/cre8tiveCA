@@ -5,7 +5,6 @@
   "private": true,
   "scripts": {
     "dev": "netlify dev",
-    "build": "npm install",
     "deploy": "netlify deploy --prod"
   },
   "dependencies": {
