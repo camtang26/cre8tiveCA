@@ -31,7 +31,17 @@ async function getAccessToken(): Promise<string> {
     return tokenCache;
   }
   
-  throw new Error('Failed to obtain access token');
+  // Log the actual error from Azure for debugging
+  console.error('Azure token error response:', JSON.stringify(tokenData));
+  console.error('Token request details:', {
+    tenant_id: Netlify.env.get('AZURE_TENANT_ID'),
+    client_id: Netlify.env.get('AZURE_CLIENT_ID'),
+    // Don't log the actual secret, just confirm it exists
+    has_client_secret: !!Netlify.env.get('AZURE_CLIENT_SECRET'),
+    secret_length: Netlify.env.get('AZURE_CLIENT_SECRET')?.length || 0
+  });
+  
+  throw new Error(`Failed to obtain access token: ${tokenData.error || 'Unknown error'} - ${tokenData.error_description || 'No description'}`);
 }
 
 export default async (req: Request, context: Context) => {
