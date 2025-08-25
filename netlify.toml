@@ -3,16 +3,16 @@
 
 [build]
   base = "netlify-edge-implementation"
-  publish = "netlify-edge-implementation/public"
+  publish = "public"
   command = "echo 'No build needed for edge functions'"
-  functions = "netlify-edge-implementation/netlify/functions"
-  edge_functions = "netlify-edge-implementation/netlify/edge-functions"
+  functions = "netlify/functions"
+  edge_functions = "netlify/edge-functions"
 
 [build.environment]
   NODE_VERSION = "18"
 
 [functions]
-  directory = "netlify-edge-implementation/netlify/functions"
+  directory = "netlify/functions"
   node_bundler = "esbuild"
 
 [[edge_functions]]
